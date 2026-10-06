@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS Quest - Data Structure Learning Portal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#0b1020;color:#fff;min-height:100vh}
+header{background:#111936;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #26345f}
+.logo{font-size:24px;font-weight:bold;color:#00eaff}
+.stats{display:flex;gap:10px;flex-wrap:wrap}.stat{background:#1a2447;padding:8px 14px;border-radius:10px}
+.container{width:90%;max-width:1100px;margin:30px auto}
+.hero{background:linear-gradient(135deg,#162452,#10172e);padding:30px;border-radius:20px;border:1px solid #293b70;margin-bottom:30px}
+.hero h1{font-size:34px;color:#00eaff;margin-bottom:10px}.hero p{color:#b8c2df}
+.xp-box{margin-top:20px}.xp-text{display:flex;justify-content:space-between;margin-bottom:8px}
+.xp-bar{height:12px;background:#252e4d;border-radius:20px;overflow:hidden}.xp-fill{width:35%;height:100%;background:linear-gradient(90deg,#00eaff,#7b5cff);transition:.4s}
+.section-title{margin-bottom:18px;font-size:25px}.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#141d38;border:1px solid #29365f;border-radius:18px;padding:22px;transition:.3s;position:relative}
+.card:hover{transform:translateY(-5px);border-color:#00eaff;box-shadow:0 0 20px #00eaff26}
+.icon{font-size:40px;margin-bottom:12px}.card h3{margin-bottom:8px}.card p{color:#9ca8c8;font-size:14px;margin-bottom:18px}
+button{border:none;padding:10px 18px;border-radius:10px;background:#00c8e8;color:#07101d;font-weight:bold;cursor:pointer}
+button:hover{background:#5beaff}.locked{opacity:.5}.lock{position:absolute;right:18px;top:18px;font-size:20px}
+.quiz-section{margin-top:35px;background:#141d38;padding:25px;border-radius:18px;border:1px solid #29365f}
+.question{font-size:20px;margin:15px 0}.options{display:grid;gap:10px}.option{background:#202b4d;color:#fff;text-align:left;width:100%}
+.option:hover{background:#2d3b66}.result{margin-top:15px;font-weight:bold;min-height:24px}
+footer{text-align:center;padding:30px;color:#7784a8}
+@media(max-width:600px){header{flex-direction:column;gap:15px}.hero h1{font-size:27px}.stats{font-size:13px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">⚡ DS QUEST</div>
+<div class="stats">
+<div class="stat">⭐ XP: <span id="xp">350</span></div>
+<div class="stat">🏆 Level: <span id="level">3</span></div>
+<div class="stat">❤️ <span id="lives">3</span></div>
+</div>
+</header>
+
+<div class="container">
+<section class="hero">
+<h1>Welcome, Data Structure Hero! 🎮</h1>
+<p>Learn Data Structures by completing levels, solving quizzes and earning XP.</p>
+<div class="xp-box">
+<div class="xp-text"><span>Level Progress</span><span id="xpProgress">350 / 1000 XP</span></div>
+<div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+</div>
+</section>
+
+<h2 class="section-title">🗺️ Learning Levels</h2>
+<section class="levels">
+<div class="card"><div class="icon">📦</div><h3>Level 1: Array</h3><p>Learn indexing, insertion, deletion and traversal.</p><button onclick="completeLevel('Array')">START LEVEL</button></div>
+<div class="card"><div class="icon">🥞</div><h3>Level 2: Stack</h3><p>Understand LIFO and stack operations.</p><button onclick="completeLevel('Stack')">START LEVEL</button></div>
+<div class="card"><div class="icon">🚶</div><h3>Level 3: Queue</h3><p>Learn FIFO, enqueue and dequeue.</p><button onclick="completeLevel('Queue')">START LEVEL</button></div>
+<div class="card"><div class="icon">🔗</div><h3>Level 4: Linked List</h3><p>Explore nodes, pointers and linked structures.</p><button onclick="completeLevel('Linked List')">START LEVEL</button></div>
+<div class="card locked"><span class="lock">🔒</span><div class="icon">🌳</div><h3>Level 5: Tree</h3><p>Binary trees, traversal and tree concepts.</p><button disabled>LOCKED</button></div>
+<div class="card locked"><span class="lock">🔒</span><div class="icon">🕸️</div><h3>Level 6: Graph</h3><p>Vertices, edges, BFS and DFS.</p><button disabled>LOCKED</button></div>
+</section>
+
+<section class="quiz-section">
+<h2>🧠 Boss Quiz</h2>
+<div class="question">Which data structure follows the LIFO principle?</div>
+<div class="options">
+<button class="option" onclick="checkAnswer(this,false)">A. Queue</button>
+<button class="option" onclick="checkAnswer(this,true)">B. Stack</button>
+<button class="option" onclick="checkAnswer(this,false)">C. Linked List</button>
+<button class="option" onclick="checkAnswer(this,false)">D. Graph</button>
+</div>
+<div class="result" id="result"></div>
+</section>
+</div>
+
+<footer>© 2026 DS Quest | Data Structure Learning Portal</footer>
+
+<script>
+let xp=350,level=3,lives=3,quizDone=false;
+function updateUI(){
+document.getElementById("xp").textContent=xp;
+document.getElementById("level").textContent=level;
+document.getElementById("lives").textContent=lives;
+document.getElementById("xpProgress").textContent=xp+" / 1000 XP";
+document.getElementById("xpFill").style.width=Math.min(xp/1000*100,100)+"%";
+}
+function completeLevel(name){
+xp+=100;
+alert("🎉 Level Completed: "+name+"\\n+100 XP earned!");
+if(xp>=1000){level++;xp=0;alert("🏆 LEVEL UP!\\nYou reached Level "+level);}
+updateUI();
+}
+function checkAnswer(button,correct){
+if(quizDone)return;
+let result=document.getElementById("result");
+if(correct){
+result.textContent="✅ Correct! +50 XP";
+button.style.background="#18c964";
+xp+=50;quizDone=true;
+}else{
+result.textContent="❌ Wrong answer! -1 ❤️";
+button.style.background="#ff4757";
+lives--;
+if(lives<=0){alert("💀 Game Over! Lives restored.");lives=3;}
+}
+updateUI();
+}
+updateUI();
+</script>
+</body>
+</html>
